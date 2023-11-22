@@ -229,16 +229,32 @@
        </layout>
       </item>
       <item>
-       <widget class="QPushButton" name="edit_nickname_pushButton">
-        <property name="font">
-         <font>
-          <pointsize>17</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>닉네임 변경</string>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout" name="hLayout_3_2" stretch="2,1">
+        <item>
+         <widget class="QPushButton" name="edit_nickname_pushButton">
+          <property name="font">
+           <font>
+            <pointsize>17</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>닉네임 변경</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="logout_pushButton">
+          <property name="font">
+           <font>
+            <pointsize>17</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>로그아웃</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
     </item>

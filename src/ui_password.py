@@ -55,7 +55,7 @@ class Ui_Dialog(object):
 
         self.retranslateUi(Dialog)
         self.buttonBox.accepted.connect(Dialog.checkPassword) # type: ignore
-        self.buttonBox.rejected.connect(Dialog.closeDiaglog) # type: ignore
+        self.buttonBox.rejected.connect(Dialog.closeDialog) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
