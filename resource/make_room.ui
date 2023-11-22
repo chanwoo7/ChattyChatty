@@ -45,13 +45,24 @@
        </item>
        <item alignment="Qt::AlignRight|Qt::AlignVCenter">
         <widget class="QLabel" name="label">
+         <property name="font">
+          <font>
+           <pointsize>15</pointsize>
+          </font>
+         </property>
          <property name="text">
           <string>방 이름</string>
          </property>
         </widget>
        </item>
        <item alignment="Qt::AlignLeft|Qt::AlignVCenter">
-        <widget class="QLineEdit" name="makeroom_name_lineEdit"/>
+        <widget class="QLineEdit" name="makeroom_name_lineEdit">
+         <property name="font">
+          <font>
+           <pointsize>15</pointsize>
+          </font>
+         </property>
+        </widget>
        </item>
        <item>
         <spacer name="horizontalSpacer">
@@ -87,13 +98,24 @@
      </item>
      <item>
       <widget class="QLabel" name="label_2">
+       <property name="font">
+        <font>
+         <pointsize>15</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>비밀번호</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="makeroom_password_lineEdit"/>
+      <widget class="QLineEdit" name="makeroom_password_lineEdit">
+       <property name="font">
+        <font>
+         <pointsize>15</pointsize>
+        </font>
+       </property>
+      </widget>
      </item>
      <item>
       <spacer name="horizontalSpacer_4">
@@ -112,6 +134,11 @@
    </item>
    <item alignment="Qt::AlignHCenter">
     <widget class="QPushButton" name="makeroom_pushButton">
+     <property name="font">
+      <font>
+       <pointsize>15</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>방 만들기</string>
      </property>
@@ -126,5 +153,25 @@
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>makeroom_pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>make_room_widget</receiver>
+   <slot>showRoomWindow()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>221</x>
+     <y>274</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>300</x>
+     <y>269</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>showRoomWindow()</slot>
+ </slots>
 </ui>
