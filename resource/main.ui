@@ -314,10 +314,27 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>logout_pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>showLoginWindow()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>277</x>
+     <y>662</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>252</x>
+     <y>639</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>setNickname()</slot>
   <slot>showMakeRoomWindow()</slot>
   <slot>sendMessage()</slot>
+  <slot>showLoginWindow()</slot>
  </slots>
 </ui>

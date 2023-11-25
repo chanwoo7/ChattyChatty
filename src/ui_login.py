@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'login.ui'
+# Form implementation generated from reading ui file 'resource/login.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.10
 #
@@ -81,6 +81,7 @@ class Ui_login_window(object):
         login_window.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(login_window)
+        self.login_enter_pushButton.clicked.connect(login_window.showMainWindow) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(login_window)
 
     def retranslateUi(self, login_window):

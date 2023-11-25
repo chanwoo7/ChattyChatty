@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'main.ui'
+# Form implementation generated from reading ui file 'resource/main.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.10
 #
@@ -170,6 +170,7 @@ class Ui_MainWindow(object):
         self.edit_nickname_pushButton.clicked.connect(MainWindow.setNickname) # type: ignore
         self.make_room_pushButton.clicked.connect(MainWindow.showMakeRoomWindow) # type: ignore
         self.send_pushButton.clicked.connect(MainWindow.sendMessage) # type: ignore
+        self.logout_pushButton.clicked.connect(MainWindow.showLoginWindow) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
