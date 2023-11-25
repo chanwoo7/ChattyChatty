@@ -138,5 +138,25 @@
   </widget>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>login_enter_pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>login_window</receiver>
+   <slot>showMainWindow()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>398</x>
+     <y>257</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>472</x>
+     <y>264</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>showMainWindow()</slot>
+ </slots>
 </ui>
