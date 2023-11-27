@@ -1,20 +1,20 @@
 import sys
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QWidget
-import ui_main, ui_login, ui_make_room, ui_password, ui_room
+import ui_main, ui_login, ui_make_room, ui_password, ui_room, ui_nickname
 
-# 로그인 - 메인 - 방만들기 - 방 간의 전환 구현 완료
 
 class MainWindow(QMainWindow, ui_main.Ui_MainWindow):
-
     # close_signal = QtCore.pyqtSignal()
-
     def __init__(self):
         super().__init__()
         self.setupUi(self)
 
     def setNickname(self):
-        pass
+        self.setDisabled(True)
+        self.secondWindow = NicknameDialog()
+        self.secondWindow.exec()
+        self.setDisabled(False)
 
     def showMakeRoomWindow(self):
         self.setDisabled(True)
@@ -42,9 +42,20 @@ class LoginWindow(QMainWindow, ui_login.Ui_login_window):
         self.secondWindow.show()
 
 
-class MakeRoomWidget(QDialog, ui_make_room.Ui_make_room_widget):
-    # ui_make_room -> 기존 QWidget에서 QDialog로 바꾸기
+class NicknameDialog(QDialog, ui_nickname.Ui_Dialog):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
 
+    def checkNickname(self):
+        # 새로운 닉네임 저장 및 반영
+        self.close()
+
+    def closeDialog(self):
+        self.close()
+
+
+class MakeRoomWidget(QDialog, ui_make_room.Ui_make_room_Dialog):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
@@ -64,7 +75,7 @@ class PasswordDialog(QDialog, ui_password.Ui_Dialog):
         pass
 
     def closeDialog(self):
-        pass
+        self.close()
 
 
 class RoomWindow(QMainWindow, ui_room.Ui_MainWindow):
