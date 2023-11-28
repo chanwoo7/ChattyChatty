@@ -176,7 +176,7 @@ def receive():
             client_socket, address = server.accept()
             print(f"Connected with {str(address)}")
             # 닉네임 요청
-            client_socket.send(json_message(1, '닉네임 요청').encode('utf-8'))
+            client_socket.send(json_message(1, address[1]).encode('utf-8'))
             message = json.loads(client_socket.recv(1024).decode('utf-8'))
             nickname = message['data'] # 닉네임 설정
 

@@ -7,6 +7,7 @@ client.connect(('127.0.0.1', 9999))
 # <socket.socket fd=1160, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0,
 # laddr=('127.0.0.1', 53517), raddr=('127.0.0.1', 9999)
 nickname = input("Choose your nickname: ")
+port=0
 
 login_list = []
 room_list = []
@@ -27,6 +28,7 @@ def receive():
                 print("전체> ", message['data'])
 
             elif message['code'] == 1: # 서버에서 닉네임 요청
+                port = message['data']
                 message = json_message(1, nickname)
                 client.send(message.encode('utf-8'))
             elif message['code'] == 2: # 서버에서 룸리스트 보내줌
@@ -49,7 +51,7 @@ def write():
     while True:
         code = f'{input("code:")}'
         message = f'{input("message:")}'
-        print('what you wrote:', code, message)
+        # print('what you wrote:', code, message)
         message = json_message(int(code), message)
 
         if message=="exit":
