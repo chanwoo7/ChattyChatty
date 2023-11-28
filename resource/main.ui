@@ -120,7 +120,13 @@
        </widget>
       </item>
       <item>
-       <widget class="QTextBrowser" name="chatting_textBrowser"/>
+       <widget class="QTextBrowser" name="chatting_textBrowser">
+        <property name="font">
+         <font>
+          <pointsize>16</pointsize>
+         </font>
+        </property>
+       </widget>
       </item>
       <item>
        <layout class="QHBoxLayout" name="hLayout_4_1">
@@ -327,6 +333,22 @@
     <hint type="destinationlabel">
      <x>252</x>
      <y>639</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>message_lineEdit</sender>
+   <signal>returnPressed()</signal>
+   <receiver>send_pushButton</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1157</x>
+     <y>670</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1219</x>
+     <y>669</y>
     </hint>
    </hints>
   </connection>

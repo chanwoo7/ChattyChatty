@@ -77,6 +77,9 @@ class Ui_MainWindow(object):
         self.chatting_label.setObjectName("chatting_label")
         self.vLayout_4.addWidget(self.chatting_label)
         self.chatting_textBrowser = QtWidgets.QTextBrowser(self.MainWidget)
+        font = QtGui.QFont()
+        font.setPointSize(16)
+        self.chatting_textBrowser.setFont(font)
         self.chatting_textBrowser.setObjectName("chatting_textBrowser")
         self.vLayout_4.addWidget(self.chatting_textBrowser)
         self.hLayout_4_1 = QtWidgets.QHBoxLayout()
@@ -171,6 +174,7 @@ class Ui_MainWindow(object):
         self.make_room_pushButton.clicked.connect(MainWindow.showMakeRoomWindow) # type: ignore
         self.send_pushButton.clicked.connect(MainWindow.sendMessage) # type: ignore
         self.logout_pushButton.clicked.connect(MainWindow.showLoginWindow) # type: ignore
+        self.message_lineEdit.returnPressed.connect(self.send_pushButton.click) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):

@@ -29,7 +29,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>방 비밀번호 입력</string>
+   <string>닉네임 변경</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
@@ -48,19 +48,19 @@
         </font>
        </property>
        <property name="text">
-        <string>비밀번호를 입력하세요.</string>
+        <string>새로운 닉네임을 입력하세요.</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="password_lineEdit">
+      <widget class="QLineEdit" name="new_nickname_lineEdit">
        <property name="font">
         <font>
-         <pointsize>20</pointsize>
+         <pointsize>18</pointsize>
         </font>
        </property>
        <property name="echoMode">
-        <enum>QLineEdit::Password</enum>
+        <enum>QLineEdit::Normal</enum>
        </property>
       </widget>
      </item>
@@ -84,22 +84,6 @@
  <connections>
   <connection>
    <sender>buttonBox</sender>
-   <signal>accepted()</signal>
-   <receiver>Dialog</receiver>
-   <slot>checkPassword()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>296</x>
-     <y>88</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>348</x>
-     <y>113</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>buttonBox</sender>
    <signal>rejected()</signal>
    <receiver>Dialog</receiver>
    <slot>closeDialog()</slot>
@@ -114,9 +98,25 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>Dialog</receiver>
+   <slot>checkNickname()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>329</x>
+     <y>89</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>364</x>
+     <y>65</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
-  <slot>checkPassword()</slot>
   <slot>closeDialog()</slot>
+  <slot>checkNickname()</slot>
  </slots>
 </ui>

@@ -81,7 +81,8 @@ class Ui_login_window(object):
         login_window.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(login_window)
-        self.login_enter_pushButton.clicked.connect(login_window.showMainWindow) # type: ignore
+        self.login_enter_pushButton.clicked.connect(login_window.show_main_window) # type: ignore
+        self.login_nickname_lineEdit.returnPressed.connect(self.login_enter_pushButton.click) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(login_window)
 
     def retranslateUi(self, login_window):

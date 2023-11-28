@@ -143,7 +143,7 @@
    <sender>login_enter_pushButton</sender>
    <signal>clicked()</signal>
    <receiver>login_window</receiver>
-   <slot>showMainWindow()</slot>
+   <slot>show_main_window()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>398</x>
@@ -155,8 +155,24 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>login_nickname_lineEdit</sender>
+   <signal>returnPressed()</signal>
+   <receiver>login_enter_pushButton</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>300</x>
+     <y>262</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>385</x>
+     <y>266</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
-  <slot>showMainWindow()</slot>
+  <slot>show_main_window()</slot>
  </slots>
 </ui>

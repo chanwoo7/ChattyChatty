@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'resource/password.ui'
+# Form implementation generated from reading ui file 'resource/nickname.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.10
 #
@@ -37,13 +37,13 @@ class Ui_Dialog(object):
         self.label.setFont(font)
         self.label.setObjectName("label")
         self.verticalLayout.addWidget(self.label)
-        self.password_lineEdit = QtWidgets.QLineEdit(Dialog)
+        self.new_nickname_lineEdit = QtWidgets.QLineEdit(Dialog)
         font = QtGui.QFont()
-        font.setPointSize(20)
-        self.password_lineEdit.setFont(font)
-        self.password_lineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
-        self.password_lineEdit.setObjectName("password_lineEdit")
-        self.verticalLayout.addWidget(self.password_lineEdit)
+        font.setPointSize(18)
+        self.new_nickname_lineEdit.setFont(font)
+        self.new_nickname_lineEdit.setEchoMode(QtWidgets.QLineEdit.Normal)
+        self.new_nickname_lineEdit.setObjectName("new_nickname_lineEdit")
+        self.verticalLayout.addWidget(self.new_nickname_lineEdit)
         self.buttonBox = QtWidgets.QDialogButtonBox(Dialog)
         font = QtGui.QFont()
         font.setPointSize(15)
@@ -54,11 +54,11 @@ class Ui_Dialog(object):
         self.horizontalLayout.addLayout(self.verticalLayout)
 
         self.retranslateUi(Dialog)
-        self.buttonBox.accepted.connect(Dialog.checkPassword) # type: ignore
         self.buttonBox.rejected.connect(Dialog.closeDialog) # type: ignore
+        self.buttonBox.accepted.connect(Dialog.checkNickname) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "방 비밀번호 입력"))
-        self.label.setText(_translate("Dialog", "비밀번호를 입력하세요."))
+        Dialog.setWindowTitle(_translate("Dialog", "닉네임 변경"))
+        self.label.setText(_translate("Dialog", "새로운 닉네임을 입력하세요."))
