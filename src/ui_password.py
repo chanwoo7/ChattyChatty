@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'password.ui'
+# Form implementation generated from reading ui file 'resource/password.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.10
 #
@@ -60,5 +60,5 @@ class Ui_Dialog(object):
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
+        Dialog.setWindowTitle(_translate("Dialog", "방 비밀번호 입력"))
         self.label.setText(_translate("Dialog", "비밀번호를 입력하세요."))

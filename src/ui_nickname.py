@@ -37,13 +37,13 @@ class Ui_Dialog(object):
         self.label.setFont(font)
         self.label.setObjectName("label")
         self.verticalLayout.addWidget(self.label)
-        self.password_lineEdit = QtWidgets.QLineEdit(Dialog)
+        self.new_nickname_lineEdit = QtWidgets.QLineEdit(Dialog)
         font = QtGui.QFont()
-        font.setPointSize(20)
-        self.password_lineEdit.setFont(font)
-        self.password_lineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
-        self.password_lineEdit.setObjectName("password_lineEdit")
-        self.verticalLayout.addWidget(self.password_lineEdit)
+        font.setPointSize(18)
+        self.new_nickname_lineEdit.setFont(font)
+        self.new_nickname_lineEdit.setEchoMode(QtWidgets.QLineEdit.Normal)
+        self.new_nickname_lineEdit.setObjectName("new_nickname_lineEdit")
+        self.verticalLayout.addWidget(self.new_nickname_lineEdit)
         self.buttonBox = QtWidgets.QDialogButtonBox(Dialog)
         font = QtGui.QFont()
         font.setPointSize(15)
@@ -60,5 +60,5 @@ class Ui_Dialog(object):
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
+        Dialog.setWindowTitle(_translate("Dialog", "닉네임 변경"))
         self.label.setText(_translate("Dialog", "새로운 닉네임을 입력하세요."))

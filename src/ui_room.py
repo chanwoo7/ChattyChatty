@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'room.ui'
+# Form implementation generated from reading ui file 'resource/room.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.10
 #
@@ -22,6 +22,9 @@ class Ui_MainWindow(object):
         MainWindow.setSizePolicy(sizePolicy)
         MainWindow.setMinimumSize(QtCore.QSize(1000, 720))
         MainWindow.setMaximumSize(QtCore.QSize(1000, 720))
+        font = QtGui.QFont()
+        font.setPointSize(16)
+        MainWindow.setFont(font)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -30,13 +33,13 @@ class Ui_MainWindow(object):
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
-        self.room_name_label = QtWidgets.QLabel(self.centralwidget)
+        self.room_title_label = QtWidgets.QLabel(self.centralwidget)
         font = QtGui.QFont()
         font.setPointSize(25)
-        self.room_name_label.setFont(font)
-        self.room_name_label.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
-        self.room_name_label.setObjectName("room_name_label")
-        self.horizontalLayout.addWidget(self.room_name_label)
+        self.room_title_label.setFont(font)
+        self.room_title_label.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
+        self.room_title_label.setObjectName("room_title_label")
+        self.horizontalLayout.addWidget(self.room_title_label)
         self.exit_room_pushButton = QtWidgets.QPushButton(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum)
         sizePolicy.setHorizontalStretch(0)
@@ -92,12 +95,13 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         self.send_pushButton.clicked.connect(MainWindow.sendMessage) # type: ignore
         self.exit_room_pushButton.clicked.connect(MainWindow.exitRoom) # type: ignore
+        self.message_lineEdit.returnPressed.connect(self.send_pushButton.click) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.room_name_label.setText(_translate("MainWindow", "방 제목"))
+        self.room_title_label.setText(_translate("MainWindow", "방 제목"))
         self.exit_room_pushButton.setText(_translate("MainWindow", "방 나가기"))
         self.label_2.setText(_translate("MainWindow", "채팅"))
         self.send_pushButton.setText(_translate("MainWindow", "전송"))

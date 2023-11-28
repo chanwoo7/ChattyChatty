@@ -28,19 +28,12 @@
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
+     <property name="leftMargin">
+      <number>31</number>
+     </property>
+     <property name="rightMargin">
+      <number>20</number>
+     </property>
      <item>
       <widget class="QLabel" name="label">
        <property name="font">
@@ -54,38 +47,30 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="room_title_lineEdit"/>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer_2">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+      <widget class="QLineEdit" name="room_title_lineEdit">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
+       <property name="font">
+        <font>
+         <pointsize>16</pointsize>
+        </font>
        </property>
-      </spacer>
+      </widget>
      </item>
     </layout>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <spacer name="horizontalSpacer_3">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
+     <property name="leftMargin">
+      <number>20</number>
+     </property>
+     <property name="rightMargin">
+      <number>20</number>
+     </property>
      <item>
       <widget class="QLabel" name="label_2">
        <property name="font">
@@ -99,20 +84,13 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="password_lineEdit"/>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer_4">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+      <widget class="QLineEdit" name="password_lineEdit">
+       <property name="font">
+        <font>
+         <pointsize>16</pointsize>
+        </font>
        </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
+      </widget>
      </item>
     </layout>
    </item>
@@ -135,7 +113,7 @@
       <widget class="QPushButton" name="make_pushButton">
        <property name="font">
         <font>
-         <pointsize>16</pointsize>
+         <pointsize>15</pointsize>
         </font>
        </property>
        <property name="text">
@@ -181,5 +159,6 @@
  </connections>
  <slots>
   <slot>showRoomWindow()</slot>
+  <slot>clickPassword()</slot>
  </slots>
 </ui>
