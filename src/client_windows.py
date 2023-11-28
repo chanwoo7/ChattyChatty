@@ -6,91 +6,81 @@ import ui_main, ui_login, ui_make_room, ui_password, ui_room, ui_nickname
 # TODO: 방 목록에 방 추가되도록
 # TODO: 방 내부 window의 유저 목록에 접속자 추가되도록
 
+# sample
+login_list = []
+room_list = []
+room_info = {}
 
-class User:
-    def __init__(self):
-        self.nickname = "default"
-        self.port = "default"
+# logged-in user info
+nickname = "default"
+port = "9000"
 
-    def set_nickname(self, nickname):
-        self.nickname = nickname
-
-    def set_port(self, port):
-        self.port = port
-
-
-class Room:
-    def __init__(self):
-        self.title = "default"
-        self.password = ""
-
-    def set_title(self, title):
-        self.title = title
-
-    def set_password(self, password):
-        self.password = password
+# logged-in user's room info
+room_title = "default"
+room_password = ""
 
 
 class LoginWindow(QMainWindow, ui_login.Ui_login_window):
-
-    def __init__(self, login_user):
+    def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.login_user = login_user
 
     # 로그인 (MainWindow로 이동)
     def login(self):
         self.close()
-        self.login_user.set_nickname(self.login_nickname_lineEdit.text())
-        self.second_window = MainWindow(self.login_user)
+        global nickname
+        nickname = self.login_nickname_lineEdit.text()
+        self.second_window = MainWindow()
         self.second_window.show()
 
 
 class MainWindow(QMainWindow, ui_main.Ui_MainWindow):
-    def __init__(self, login_user):
+    def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.login_user = login_user
-        self.nickname_label.setText(login_user.nickname)
-        self.port_number_label.setText("#" + str(login_user.port))
+
+        global nickname, port
+        self.nickname_label.setText(nickname)
+        self.port_number_label.setText("#" + str(port))
 
     # 닉네임 변경 (NicknameDialog 띄움)
     def edit_nickname(self):
         self.setDisabled(True)
-        self.second_window = NicknameDialog(self.login_user)
+        self.second_window = NicknameDialog()
         self.second_window.exec()
         self.setDisabled(False)
-        self.nickname_label.setText(self.login_user.nickname)
+        global nickname
+        self.nickname_label.setText(nickname)
 
     # 방 만들기 창으로 이동 (MakeRoomDialog 띄움)
     def show_make_room_dialog(self):
         self.setDisabled(True)
-        self.second_window = MakeRoomDialog(self.login_user)
+        self.second_window = MakeRoomDialog()
         self.second_window.exec()
         self.setDisabled(False)
 
     # 로비에 메시지 전송
     def send_message(self):
-        self.chatting_textBrowser.append(f"<b>[{self.login_user.nickname}#{self.login_user.port}]</b> "
-                                         + self.message_lineEdit.text())
+        global nickname, port
+        self.chatting_textBrowser.append(f"<b>[{nickname}#{port}]</b> " + self.message_lineEdit.text())
         self.message_lineEdit.clear()
 
     # 로그아웃 (LoginWindow로 이동)
     def logout(self):
         self.close()
-        self.second_window = LoginWindow(self.login_user)
+        self.second_window = LoginWindow()
         self.second_window.show()
 
 
 class NicknameDialog(QDialog, ui_nickname.Ui_Dialog):
-    def __init__(self, login_user):
+    def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.login_user = login_user
 
     # 새로운 닉네임 저장
     def save_nickname(self):
-        self.login_user.set_nickname(self.new_nickname_lineEdit.text())
+        global nickname
+        nickname = self.new_nickname_lineEdit.text()
         self.new_nickname_lineEdit.clear()
         self.close()
 
@@ -99,26 +89,24 @@ class NicknameDialog(QDialog, ui_nickname.Ui_Dialog):
 
 
 class MakeRoomDialog(QDialog, ui_make_room.Ui_make_room_Dialog):
-    def __init__(self, login_user):
+    def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.login_user = login_user
-        self.current_room = Room()
 
     # 방 생성 (RoomWindow로 이동)
     def make_room(self):
         QApplication.closeAllWindows()
-        self.current_room.set_title(self.room_title_lineEdit.text())
-        self.current_room.set_password(self.password_lineEdit.text())
-        self.second_window = RoomWindow(self.login_user, self.current_room)
+        global room_title, room_password
+        room_title = self.room_title_lineEdit.text()
+        room_password = self.password_lineEdit.text()
+        self.second_window = RoomWindow()
         self.second_window.show()
 
 
 class PasswordDialog(QDialog, ui_password.Ui_Dialog):
-    def __init__(self, login_user):
+    def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.login_user = login_user
 
     # 비밀번호가 맞는지 확인
     def check_password(self):
@@ -131,31 +119,27 @@ class PasswordDialog(QDialog, ui_password.Ui_Dialog):
 
 class RoomWindow(QMainWindow, ui_room.Ui_MainWindow):
 
-    def __init__(self, login_user, current_room):
+    def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.login_user = login_user
-        self.current_room = current_room
-        self.room_title_label.setText(current_room.title)
+        global room_title
+        self.room_title_label.setText(room_title)
 
     # 메시지 전송
     def send_message(self):
-        self.chatting_textBrowser.append(f"<b>[{self.login_user.nickname}#{self.login_user.port}]</b> "
-                                         + self.message_lineEdit.text())
+        global nickname, port
+        self.chatting_textBrowser.append(f"<b>[{nickname}#{port}]</b> " + self.message_lineEdit.text())
         self.message_lineEdit.clear()
 
     # 방 나가기 (MainWindow로 이동)
     def exit_room(self):
         self.close()
-        self.second_window = MainWindow(self.login_user)
+        self.second_window = MainWindow()
         self.second_window.show()
 
 
 if __name__ == "__main__":
-    user = User()
-    user.set_port(1234)
-
     app = QApplication(sys.argv)
-    myWindow = LoginWindow(user)
+    myWindow = LoginWindow()
     myWindow.show()
     app.exec_()
