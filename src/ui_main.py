@@ -170,11 +170,11 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
-        self.edit_nickname_pushButton.clicked.connect(MainWindow.setNickname) # type: ignore
-        self.make_room_pushButton.clicked.connect(MainWindow.showMakeRoomWindow) # type: ignore
-        self.send_pushButton.clicked.connect(MainWindow.sendMessage) # type: ignore
-        self.logout_pushButton.clicked.connect(MainWindow.showLoginWindow) # type: ignore
         self.message_lineEdit.returnPressed.connect(self.send_pushButton.click) # type: ignore
+        self.edit_nickname_pushButton.clicked.connect(MainWindow.edit_nickname) # type: ignore
+        self.logout_pushButton.clicked.connect(MainWindow.logout) # type: ignore
+        self.send_pushButton.clicked.connect(MainWindow.send_message) # type: ignore
+        self.make_room_pushButton.clicked.connect(MainWindow.show_make_room_dialog) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):

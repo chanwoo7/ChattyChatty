@@ -140,22 +140,6 @@
  <resources/>
  <connections>
   <connection>
-   <sender>login_enter_pushButton</sender>
-   <signal>clicked()</signal>
-   <receiver>login_window</receiver>
-   <slot>show_main_window()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>398</x>
-     <y>257</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>472</x>
-     <y>264</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>login_nickname_lineEdit</sender>
    <signal>returnPressed()</signal>
    <receiver>login_enter_pushButton</receiver>
@@ -171,8 +155,24 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>login_enter_pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>login_window</receiver>
+   <slot>login()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>403</x>
+     <y>261</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>445</x>
+     <y>311</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
-  <slot>show_main_window()</slot>
+  <slot>login()</slot>
  </slots>
 </ui>

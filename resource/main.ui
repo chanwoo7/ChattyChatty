@@ -273,70 +273,6 @@
  </resources>
  <connections>
   <connection>
-   <sender>edit_nickname_pushButton</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>setNickname()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>175</x>
-     <y>663</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>118</x>
-     <y>619</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>make_room_pushButton</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>showMakeRoomWindow()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1232</x>
-     <y>25</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1241</x>
-     <y>8</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>send_pushButton</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>sendMessage()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1233</x>
-     <y>661</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1080</x>
-     <y>663</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>logout_pushButton</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>showLoginWindow()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>277</x>
-     <y>662</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>252</x>
-     <y>639</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>message_lineEdit</sender>
    <signal>returnPressed()</signal>
    <receiver>send_pushButton</receiver>
@@ -352,11 +288,75 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>edit_nickname_pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>edit_nickname()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>105</x>
+     <y>666</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>71</x>
+     <y>640</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>logout_pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>logout()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>269</x>
+     <y>659</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>241</x>
+     <y>641</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>send_pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>send_message()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1217</x>
+     <y>670</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1256</x>
+     <y>694</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>make_room_pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>show_make_room_dialog()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1213</x>
+     <y>22</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1255</x>
+     <y>8</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
-  <slot>setNickname()</slot>
-  <slot>showMakeRoomWindow()</slot>
-  <slot>sendMessage()</slot>
-  <slot>showLoginWindow()</slot>
+  <slot>edit_nickname()</slot>
+  <slot>logout()</slot>
+  <slot>send_message()</slot>
+  <slot>show_make_room_dialog()</slot>
  </slots>
 </ui>

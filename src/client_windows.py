@@ -2,11 +2,11 @@ import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog
 import ui_main, ui_login, ui_make_room, ui_password, ui_room, ui_nickname
 
+# TODO: 전체 접속자 목록에 추가되도록
+# TODO: 방 목록에 방 추가되도록
+# TODO: 방 내부 window의 유저 목록에 접속자 추가되도록
 
-# TODO: 모든 카멜 케이스 -> 스네이크 케이스로 변환
-# TODO: Room 클래스 생성하고 그에 맞는 구현 ㄱㄱ
 
-# 테스트를 위해 임의로 만든 유저 클래스
 class User:
     def __init__(self):
         self.nickname = "default"
@@ -38,8 +38,8 @@ class LoginWindow(QMainWindow, ui_login.Ui_login_window):
         self.setupUi(self)
         self.login_user = login_user
 
-    # 로그인
-    def show_main_window(self):
+    # 로그인 (MainWindow로 이동)
+    def login(self):
         self.close()
         self.login_user.set_nickname(self.login_nickname_lineEdit.text())
         self.second_window = MainWindow(self.login_user)
@@ -54,27 +54,29 @@ class MainWindow(QMainWindow, ui_main.Ui_MainWindow):
         self.nickname_label.setText(login_user.nickname)
         self.port_number_label.setText("#" + str(login_user.port))
 
-    def setNickname(self):
+    # 닉네임 변경 (NicknameDialog 띄움)
+    def edit_nickname(self):
         self.setDisabled(True)
         self.second_window = NicknameDialog(self.login_user)
         self.second_window.exec()
         self.setDisabled(False)
         self.nickname_label.setText(self.login_user.nickname)
 
-    def showMakeRoomWindow(self):
+    # 방 만들기 창으로 이동 (MakeRoomDialog 띄움)
+    def show_make_room_dialog(self):
         self.setDisabled(True)
         self.second_window = MakeRoomDialog(self.login_user)
         self.second_window.exec()
         self.setDisabled(False)
 
     # 로비에 메시지 전송
-    def sendMessage(self):
+    def send_message(self):
         self.chatting_textBrowser.append(f"<b>[{self.login_user.nickname}#{self.login_user.port}]</b> "
                                          + self.message_lineEdit.text())
         self.message_lineEdit.clear()
 
-    # 로그아웃
-    def showLoginWindow(self):
+    # 로그아웃 (LoginWindow로 이동)
+    def logout(self):
         self.close()
         self.second_window = LoginWindow(self.login_user)
         self.second_window.show()
@@ -86,14 +88,13 @@ class NicknameDialog(QDialog, ui_nickname.Ui_Dialog):
         self.setupUi(self)
         self.login_user = login_user
 
-    def checkNickname(self):
-        # 새로운 닉네임 저장
+    # 새로운 닉네임 저장
+    def save_nickname(self):
         self.login_user.set_nickname(self.new_nickname_lineEdit.text())
         self.new_nickname_lineEdit.clear()
-
         self.close()
 
-    def closeDialog(self):
+    def close_dialog(self):
         self.close()
 
 
@@ -104,7 +105,8 @@ class MakeRoomDialog(QDialog, ui_make_room.Ui_make_room_Dialog):
         self.login_user = login_user
         self.current_room = Room()
 
-    def showRoomWindow(self):
+    # 방 생성 (RoomWindow로 이동)
+    def make_room(self):
         QApplication.closeAllWindows()
         self.current_room.set_title(self.room_title_lineEdit.text())
         self.current_room.set_password(self.password_lineEdit.text())
@@ -118,10 +120,12 @@ class PasswordDialog(QDialog, ui_password.Ui_Dialog):
         self.setupUi(self)
         self.login_user = login_user
 
-    def checkPassword(self):
+    # 비밀번호가 맞는지 확인
+    def check_password(self):
+        # TODO: 비밀번호가 맞는지 확인하고, 맞을/틀릴 경우 핸들링
         pass
 
-    def closeDialog(self):
+    def close_dialog(self):
         self.close()
 
 
@@ -134,12 +138,14 @@ class RoomWindow(QMainWindow, ui_room.Ui_MainWindow):
         self.current_room = current_room
         self.room_title_label.setText(current_room.title)
 
-    def sendMessage(self):
+    # 메시지 전송
+    def send_message(self):
         self.chatting_textBrowser.append(f"<b>[{self.login_user.nickname}#{self.login_user.port}]</b> "
                                          + self.message_lineEdit.text())
         self.message_lineEdit.clear()
 
-    def exitRoom(self):
+    # 방 나가기 (MainWindow로 이동)
+    def exit_room(self):
         self.close()
         self.second_window = MainWindow(self.login_user)
         self.second_window.show()

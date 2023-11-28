@@ -144,21 +144,21 @@
    <sender>make_pushButton</sender>
    <signal>clicked()</signal>
    <receiver>make_room_Dialog</receiver>
-   <slot>showRoomWindow()</slot>
+   <slot>make_room()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>195</x>
-     <y>165</y>
+     <x>230</x>
+     <y>155</y>
     </hint>
     <hint type="destinationlabel">
-     <x>332</x>
-     <y>164</y>
+     <x>297</x>
+     <y>161</y>
     </hint>
    </hints>
   </connection>
  </connections>
  <slots>
-  <slot>showRoomWindow()</slot>
   <slot>clickPassword()</slot>
+  <slot>make_room()</slot>
  </slots>
 </ui>

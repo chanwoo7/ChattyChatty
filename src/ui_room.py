@@ -93,9 +93,9 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusBar)
 
         self.retranslateUi(MainWindow)
-        self.send_pushButton.clicked.connect(MainWindow.sendMessage) # type: ignore
-        self.exit_room_pushButton.clicked.connect(MainWindow.exitRoom) # type: ignore
         self.message_lineEdit.returnPressed.connect(self.send_pushButton.click) # type: ignore
+        self.send_pushButton.clicked.connect(MainWindow.send_message) # type: ignore
+        self.exit_room_pushButton.clicked.connect(MainWindow.exit_room) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
