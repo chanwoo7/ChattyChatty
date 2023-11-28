@@ -71,7 +71,7 @@ class Ui_make_room_Dialog(object):
         self.verticalLayout.addLayout(self.horizontalLayout_3)
 
         self.retranslateUi(make_room_Dialog)
-        self.make_pushButton.clicked.connect(make_room_Dialog.showRoomWindow) # type: ignore
+        self.make_pushButton.clicked.connect(make_room_Dialog.make_room) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(make_room_Dialog)
 
     def retranslateUi(self, make_room_Dialog):

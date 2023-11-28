@@ -140,38 +140,6 @@
  <resources/>
  <connections>
   <connection>
-   <sender>send_pushButton</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>sendMessage()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>941</x>
-     <y>669</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>893</x>
-     <y>686</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>exit_room_pushButton</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>exitRoom()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>952</x>
-     <y>29</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>900</x>
-     <y>6</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>message_lineEdit</sender>
    <signal>returnPressed()</signal>
    <receiver>send_pushButton</receiver>
@@ -187,9 +155,41 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>send_pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>send_message()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>957</x>
+     <y>668</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>877</x>
+     <y>690</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>exit_room_pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>exit_room()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>945</x>
+     <y>24</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>927</x>
+     <y>8</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
-  <slot>sendMessage()</slot>
-  <slot>exitRoom()</slot>
+  <slot>send_message()</slot>
+  <slot>exit_room()</slot>
  </slots>
 </ui>
