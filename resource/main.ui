@@ -54,7 +54,13 @@
        </widget>
       </item>
       <item>
-       <widget class="QTextBrowser" name="connected_users_list_textBrowser"/>
+       <widget class="QListWidget" name="all_users_listWidget">
+        <property name="font">
+         <font>
+          <pointsize>16</pointsize>
+         </font>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>
@@ -98,7 +104,16 @@
        </layout>
       </item>
       <item>
-       <widget class="QListWidget" name="listWidget"/>
+       <widget class="QTableWidget" name="room_list_tableWidget">
+        <property name="font">
+         <font>
+          <pointsize>16</pointsize>
+         </font>
+        </property>
+        <attribute name="verticalHeaderVisible">
+         <bool>false</bool>
+        </attribute>
+       </widget>
       </item>
      </layout>
     </item>
