@@ -1,7 +1,6 @@
 import sys
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QTableWidgetItem, QPushButton, QLabel
 import ui_main, ui_login, ui_make_room, ui_password, ui_password_error, ui_room, ui_nickname
 
