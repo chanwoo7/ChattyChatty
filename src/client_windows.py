@@ -4,6 +4,16 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QTableWidgetItem, QPushButton, QLabel
 import ui_main, ui_login, ui_make_room, ui_password, ui_password_error, ui_room, ui_nickname
 
+from PyQt5.QtCore import pyqtSignal, QObject
+import socket, threading, json
+from collections import deque
+
+class CustomSignal(QObject):
+    broadcast = pyqtSignal(str)
+    update_login_list = pyqtSignal()
+    update_room_list = pyqtSignal()
+    update_room_info = pyqtSignal()
+
 # logged-in user info
 nickname = "default"
 port = "9000"
@@ -23,7 +33,7 @@ login_list = [{"nickname": "소붕이", "port": 9000},
 room_list = [{"name": "소붕이 모임", "user_count": 4, "number": 123, "password": "1234"},
              {"name": "안녕?", "user_count": 5, "number": 122, "password": "9876"},
              {"name": "밥밥디라라", "user_count": 7, "number": 253, "password": "0000"}]
-room_info = {"name": "소붕이 모임", "user_count": 4, "number": 123, "password": 1234,
+room_info = {"name": "소붕이 모임", "user_count": 4, "number": 123, "password": "1234",
              "clients": [{"nickname": "소붕이", "port": 9000},
                          {"nickname": "이하람", "port": 1234},
                          {"nickname": "이찬우", "port": 9547},
@@ -40,6 +50,17 @@ class LoginWindow(QMainWindow, ui_login.Ui_login_window):
         self.close()
         global nickname
         nickname = self.login_nickname_lineEdit.text()
+
+        client.connect(('127.0.0.1', 9999)) # 서버와 연결
+        # 멀티 클라이언트용 쓰레드
+        queue_thread = threading.Thread(target=msg_queue,)
+        receive_thread = threading.Thread(target=receive,)
+        queue_thread.start()
+        receive_thread.start()
+        # 메시지 보내기
+        # write_thread = threading.Thread(target=write)
+        # write_thread.start()
+
         self.second_window = MainWindow()
         self.second_window.show()
 
@@ -49,7 +70,12 @@ class MainWindow(QMainWindow, ui_main.Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
 
-        global nickname, port
+        global nickname, port, custom_signal
+
+        custom_signal.broadcast.connect(self.send_message)
+        custom_signal.update_room_list.connect(self.update_room_list)
+        custom_signal.update_login_list.connect(self.update_all_user_list)
+
         self.nickname_label.setText(nickname)
         self.port_number_label.setText("#" + str(port))
 
@@ -64,6 +90,8 @@ class MainWindow(QMainWindow, ui_main.Ui_MainWindow):
         self.setDisabled(False)
         global nickname
         self.nickname_label.setText(nickname)
+        
+        # TODO 닉네임변경
 
     # 방 만들기 창 띄움 (MakeRoomDialog 띄움)
     def show_make_room_dialog(self):
@@ -72,10 +100,16 @@ class MainWindow(QMainWindow, ui_main.Ui_MainWindow):
         self.second_window.exec()
         self.setDisabled(False)
 
+    # 로비 전체채팅방에 broadcast 메시지 업데이트
+    def update_broadcast(self, msg):
+        self.chatting_textBrowser.append(msg)
     # 로비에 메시지 전송
     def send_message(self):
         global nickname, port
-        self.chatting_textBrowser.append(f"<b>[{nickname}#{port}]</b> " + self.message_lineEdit.text())
+        # TODO send 전체메시지
+        # self.chatting_textBrowser.append(f"<b>[{nickname}#{port}]</b> " + self.message_lineEdit.text())
+        message = json_message(1, self.message_lineEdit.text())
+        client.send(message.encode('utf-8'))
         self.message_lineEdit.clear()
 
     # 로그아웃 (LoginWindow로 이동)
@@ -94,6 +128,7 @@ class MainWindow(QMainWindow, ui_main.Ui_MainWindow):
     # 전역변수에서 데이터 불러옴
     def update_all_user_list(self):
         global login_list
+        self.all_users_listWidget.clear()
         for user in login_list:
             self.all_users_listWidget.addItem(user["nickname"] + "#" + str(user["port"]))
 
@@ -161,6 +196,8 @@ class MakeRoomDialog(QDialog, ui_make_room.Ui_make_room_Dialog):
         room_password = self.password_lineEdit.text()
         self.second_window = RoomWindow()
         self.second_window.show()
+        
+        # TODO 방생성
 
 
 class PasswordDialog(QDialog, ui_password.Ui_Dialog):
@@ -181,6 +218,7 @@ class PasswordDialog(QDialog, ui_password.Ui_Dialog):
             QApplication.closeAllWindows()
             self.second_window = RoomWindow()
             self.second_window.show()
+            # TODO 방입장
         # 비밀번호가 틀릴 경우
         else:
             self.setDisabled(True)
@@ -211,17 +249,22 @@ class RoomWindow(QMainWindow, ui_room.Ui_MainWindow):
         # -------------------------------------------------------------------------
         self.update_room_info()
 
+        custom_signal.update_room_info.connect(self.update_room_info)
+
     # 메시지 전송
     def send_message(self):
         global nickname, port
         self.chatting_textBrowser.append(f"<b>[{nickname}#{port}]</b> " + self.message_lineEdit.text())
         self.message_lineEdit.clear()
+        # TODO send message
 
     # 방 나가기 (MainWindow로 이동)
     def exit_room(self):
         self.close()
         self.second_window = MainWindow()
         self.second_window.show()
+
+        # TODO exit room
 
     # 전역변수에서 데이터 불러옴
     def update_room_info(self):
@@ -259,7 +302,83 @@ class ImgWidget(QtWidgets.QLabel):
         self.setAlignment(QtCore.Qt.AlignCenter)
         self.setPixmap(pic)
 
+def json_message(code, data):
+    return json.dumps({'code': code, 'data': data}, ensure_ascii=False)
 
+def msg_queue():
+    while True:
+        message = (client.recv(1024).decode('utf-8'))
+        message = json.loads(message)
+        message_queue.append(message)
+
+def receive():
+    global nickname, port, client, login_list, room_list, room_info, custom_signal
+    while True:
+        try:
+            if len(message_queue)==0: # 메시지 큐에 메시지 있을때까지
+                continue
+            message = message_queue.popleft()
+            print(message)
+
+            if message == "":
+                raise Exception("message 0")
+
+            if message['code'] == 0: # broadcast 함수를 통한 전체 메시지
+                print(message['data'])
+                custom_signal.broadcast.emit(message['data'])
+
+            elif message['code'] == 1: # 서버에서 닉네임 요청
+                port = message['data']
+                message = json_message(1, nickname)
+                client.send(message.encode('utf-8'))
+
+            elif message['code'] == 2: # 서버에서 룸리스트 보내줌
+                room_list = message['data']['room_list']
+                print('room_list', room_list)
+                custom_signal.update_room_list.emit()
+
+            elif message['code'] == 3: # 서버에서 로그인리스트 보내줌
+                login_list = message['data']['login_list']
+                print('login_list', login_list)
+                custom_signal.update_login_list.emit()
+
+            elif message['code'] == 6: # room chat!
+                pass # TODO
+
+            elif message['code'] == 8: # 서버에서 room_info 보내줌
+                room_info = message['data']['room_info']
+                print('room_info', room_info)
+                custom_signal.update_room_info.emit()
+
+            else:
+                print(message)
+
+        except Exception as e:
+            print("An error occured!", e)
+            client.close()
+            break
+
+
+# def write():
+#     while True:
+#         code = f'{input("code:")}'
+#         message = f'{input("message:")}'
+#         # print('what you wrote:', code, message)
+#         message = json_message(int(code), message)
+#
+#         if message=="exit":
+#             break
+#
+#         client.send(message.encode('utf-8'))
+
+
+# global custom_signal
+# custom_signal.updateLog.connect(self.update_log)
+
+# 전역변수
+custom_signal = CustomSignal()
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+message_queue = deque()
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     myWindow = LoginWindow()
