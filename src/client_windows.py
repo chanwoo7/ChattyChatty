@@ -13,6 +13,7 @@ class CustomSignal(QObject):
     update_login_list = pyqtSignal()
     update_room_list = pyqtSignal()
     update_room_info = pyqtSignal()
+    broadcast_room_chat = pyqtSignal(str)
 
 # logged-in user info
 nickname = "default"
@@ -72,7 +73,7 @@ class MainWindow(QMainWindow, ui_main.Ui_MainWindow):
 
         global nickname, port, custom_signal
 
-        custom_signal.broadcast.connect(self.send_message)
+        custom_signal.broadcast.connect(self.update_broadcast)
         custom_signal.update_room_list.connect(self.update_room_list)
         custom_signal.update_login_list.connect(self.update_all_user_list)
 
@@ -90,8 +91,7 @@ class MainWindow(QMainWindow, ui_main.Ui_MainWindow):
         self.setDisabled(False)
         global nickname
         self.nickname_label.setText(nickname)
-        
-        # TODO 닉네임변경
+        client.send(json_message(4, nickname).encode('utf-8'))
 
     # 방 만들기 창 띄움 (MakeRoomDialog 띄움)
     def show_make_room_dialog(self):
@@ -106,7 +106,6 @@ class MainWindow(QMainWindow, ui_main.Ui_MainWindow):
     # 로비에 메시지 전송
     def send_message(self):
         global nickname, port
-        # TODO send 전체메시지
         # self.chatting_textBrowser.append(f"<b>[{nickname}#{port}]</b> " + self.message_lineEdit.text())
         message = json_message(1, self.message_lineEdit.text())
         client.send(message.encode('utf-8'))
@@ -118,10 +117,13 @@ class MainWindow(QMainWindow, ui_main.Ui_MainWindow):
         self.second_window = LoginWindow()
         self.second_window.show()
 
+        client.send(json_message(10, None).encode('utf-8'))
+        client.close()
+
     # 방 비밀번호 입력 창 띄움 (PasswordDialog 띄움)
-    def show_password_dialog(self, password):
+    def show_password_dialog(self,number, password):
         self.setDisabled(True)
-        self.second_window = PasswordDialog(password)
+        self.second_window = PasswordDialog(number, password)
         self.second_window.exec()
         self.setDisabled(False)
 
@@ -149,15 +151,14 @@ class MainWindow(QMainWindow, ui_main.Ui_MainWindow):
             # locals()['name_button_' + str(i)] = QPushButton()  # 변수를 여러 개 생성해서 해보고자 했으나 -> 실패
             self.name_button = QPushButton()
             self.name_button.setText(room_list[i]["name"])
-
-            # FIXME: 버튼 커넥팅이 따로 되지 않고, 동일한 parameter를 매개변수로 받는 함수로 연결되는 문제
-            password = room_list[i]["password"]
-            self.name_button.clicked.connect(lambda: self.show_password_dialog(password))
-
             user_count_item = QTableWidgetItem(str(room_list[i]["user_count"]))
             user_count_item.setTextAlignment(Qt.AlignCenter)
-            number_item = QTableWidgetItem(str(room_list[i]["number"]))
+            number = room_list[i]["number"]
+            number_item = QTableWidgetItem(str(number))
             number_item.setTextAlignment(Qt.AlignCenter)
+            # FIXME: 버튼 커넥팅이 따로 되지 않고, 동일한 parameter를 매개변수로 받는 함수로 연결되는 문제
+            password = room_list[i]["password"]
+            self.name_button.clicked.connect(lambda: self.show_password_dialog(number, password))
 
             self.room_list_tableWidget.setItem(i, 0, number_item)
             self.room_list_tableWidget.setCellWidget(i, 1, self.name_button)
@@ -196,14 +197,16 @@ class MakeRoomDialog(QDialog, ui_make_room.Ui_make_room_Dialog):
         room_password = self.password_lineEdit.text()
         self.second_window = RoomWindow()
         self.second_window.show()
-        
-        # TODO 방생성
+
+        d = {"name": room_title, "password": room_password}
+        client.send(json_message(5, d).encode('utf-8'))
 
 
 class PasswordDialog(QDialog, ui_password.Ui_Dialog):
-    def __init__(self, password):
+    def __init__(self, number, password):
         super().__init__()
         self.setupUi(self)
+        self.number = number
         self.password = password
 
     # 비밀번호가 맞는지 확인
@@ -215,10 +218,11 @@ class PasswordDialog(QDialog, ui_password.Ui_Dialog):
 
         # 비밀번호가 맞을 경우
         if str(self.password) == self.password_lineEdit.text():
+            d = {"room_num": int(self.number), "password": str(self.password)}
+            client.send(json_message(7, d).encode('utf-8'))
             QApplication.closeAllWindows()
             self.second_window = RoomWindow()
             self.second_window.show()
-            # TODO 방입장
         # 비밀번호가 틀릴 경우
         else:
             self.setDisabled(True)
@@ -250,21 +254,26 @@ class RoomWindow(QMainWindow, ui_room.Ui_MainWindow):
         self.update_room_info()
 
         custom_signal.update_room_info.connect(self.update_room_info)
+        custom_signal.broadcast_room_chat.connect(self.update_room_chat)
+
+    def update_room_chat(self, msg):
+        self.chatting_textBrowser.append(msg)
 
     # 메시지 전송
     def send_message(self):
         global nickname, port
-        self.chatting_textBrowser.append(f"<b>[{nickname}#{port}]</b> " + self.message_lineEdit.text())
+        # self.chatting_textBrowser.append(f"<b>[{nickname}#{port}]</b> " + self.message_lineEdit.text())
+        d = {"room_num": room_info["number"], "chat": self.message_lineEdit.text()}
+        message = json_message(6, d)
+        client.send(message.encode('utf-8'))
         self.message_lineEdit.clear()
-        # TODO send message
 
     # 방 나가기 (MainWindow로 이동)
     def exit_room(self):
+        client.send(json_message(9, room_info["number"]).encode('utf-8'))
         self.close()
         self.second_window = MainWindow()
         self.second_window.show()
-
-        # TODO exit room
 
     # 전역변수에서 데이터 불러옴
     def update_room_info(self):
@@ -318,7 +327,7 @@ def receive():
             if len(message_queue)==0: # 메시지 큐에 메시지 있을때까지
                 continue
             message = message_queue.popleft()
-            print(message)
+            print(message, message_queue)
 
             if message == "":
                 raise Exception("message 0")
@@ -343,7 +352,7 @@ def receive():
                 custom_signal.update_login_list.emit()
 
             elif message['code'] == 6: # room chat!
-                pass # TODO
+                custom_signal.broadcast_room_chat.emit(message['data'])
 
             elif message['code'] == 8: # 서버에서 room_info 보내줌
                 room_info = message['data']['room_info']
@@ -378,7 +387,7 @@ def receive():
 # 전역변수
 custom_signal = CustomSignal()
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-message_queue = deque()
+message_queue = deque([])
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     myWindow = LoginWindow()

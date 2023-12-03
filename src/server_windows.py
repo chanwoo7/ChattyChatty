@@ -34,7 +34,7 @@ class Room:
         yield 'user_count', len(self.clients)
 
     def join(self, client):
-        self.clients.append((client))  # 객체 추가
+        self.clients.append(client)  # 객체 추가
         # 정원? -> 여기서 관리 필요
 
     def exit(self, client):
@@ -84,10 +84,10 @@ def broadcast_room_list():
     broadcast(2, {'room_list': room_list})  # 방 목록 broadcast
 
 def broadcast_room_info(room):
-    global clients
     room_dict = dict(room)
-    room_dict['clients'] = [dict(c) for c in clients]
+    room_dict['clients'] = [dict(c) for c in room.clients]
     message = json_message(8, {'room_info': room_dict})
+    print("broadcast>", message)
     for client in room.clients:
         client.socket.send(message.encode('utf-8'))
 
@@ -125,21 +125,20 @@ def handle(client):
                 password = message['data']['password']
                 room = Room(name, password)
                 room.join(client) # 방장 방 들어가기
+                rooms.append(room)
                 broadcast_room_list()
-                broadcast_room_info(room) # ==방장(방만든client)한테 room_info 주기
+                broadcast_room_info(room) # 방장(방만든client)한테 room_info 주기
 
             elif message['code'] == 6: # room chat !
                 room_num = int(message['data']['room_num'])
                 for room in rooms:
                     if room.number == room_num:
-                        if room.password == password:  # 비밀번호 맞으면
-                            broadcast_room_chat(room, (f"{client.nickname}#{client.port}: " + message['data']))
+                            broadcast_room_chat(room, (f"{client.nickname}#{client.port}: " + message['data']['chat']))
 
             elif message['code'] == 7: # 방접속
                 room_num = int(message['data']['room_num'])
                 password = message['data']['password']
-                if not room_num in [room.number for room in rooms]:
-                    # todo 방이 없으면 접근 실패알림 ???? 가능한가? room_info를 특이하게 줘서 실패나 퇴장인거를 알수있게 할까
+                if not room_num in [room.number for room in rooms]: # 방이 없음
                     pass
                 else: # 방이 있음
                     for room in rooms:
@@ -147,11 +146,9 @@ def handle(client):
                             if room.password == password: # 비밀번호 맞으면
                                 room.join(client) # 방 접속
                                 broadcast_room_list() # 방 목록 업데이트
-                                broadcast_room_info(room) # 방 정보 업데이트  # todo 접근 성공 알림 ????? 일단 broadcast_room_info()로만
-                                # todo ~가 입장했습니다 이거는 안댐,, 안내 문구를 같이 보내게 만들까??
+                                broadcast_room_info(room) # 방 정보 업데이트
                             else: # 비밀번호 틀리면
                                 pass
-                                # todo 접근 실패알림 ???? 이거 가능한가?
                             break
 
             elif message['code'] == 9: # exit_room
