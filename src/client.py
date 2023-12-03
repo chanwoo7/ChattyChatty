@@ -54,7 +54,7 @@ def receive():
                 custom_signal.update_login_list.emit()
 
             elif message['code'] == 6: # room chat!
-
+                pass
             elif message['code'] == 8: # 서버에서 room_info 보내줌
                 room_info = message['data']['room_info']
                 print('room_info', room_info)
