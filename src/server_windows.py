@@ -13,31 +13,32 @@ class Client:
         yield 'nickname', self.nickname
         yield 'port', self.port
 
-        class Room:
-            number = 0
-            name = ""
-            clients = []
-            password = ""
+class Room:
+    number = 0
+    name = ""
+    clients = []
+    password = ""
 
-            # 정원?
-            def __init__(self, name, password):
-                ROOM_NUMBER += 1
-                self.number = ROOM_NUMBER
-                self.name = name
-                self.password = password
+    # 정원?
+    def __init__(self, name, password):
+        global ROOM_NUMBER
+        ROOM_NUMBER += 1
+        self.number = ROOM_NUMBER
+        self.name = name
+        self.password = password
 
-            def __iter__(self):
-                yield 'number', self.number
-                yield 'name', self.name
-                yield 'password', self.password
-                yield 'user_count', len(self.clients)
+    def __iter__(self):
+        yield 'number', self.number
+        yield 'name', self.name
+        yield 'password', self.password
+        yield 'user_count', len(self.clients)
 
-            def join(self, client):
-                clients.append((client))  # 객체 추가
-                # 정원? -> 여기서 관리 필요
+    def join(self, client):
+        self.clients.append((client))  # 객체 추가
+        # 정원? -> 여기서 관리 필요
 
-            def exit(self, client):
-                clients.remove(client)
+    def exit(self, client):
+        self.clients.remove(client)
 
 class CustomSignal(QObject):
     updateLog = pyqtSignal(str)
@@ -47,6 +48,7 @@ class ServerDialog(QDialog, ui_server.Ui_server_dialog):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        global custom_signal
         custom_signal.updateLog.connect(self.update_log)
 
     def update_log(self, msg):
@@ -58,6 +60,7 @@ def json_message(code, data):
 
 # 서버가 받은 메시지를 클라이언트 전체에 보내기
 def broadcast(code, data):
+    global custom_signal
     message = json_message(code, data)
     print("broadcast>", message)
     custom_signal.updateLog.emit(f"broadcast> {message}")
@@ -81,24 +84,35 @@ def broadcast_room_list():
     broadcast(2, {'room_list': room_list})  # 방 목록 broadcast
 
 def broadcast_room_info(room):
-    message = json_message(8, {'room_info': dict(room)})
+    global clients
+    room_dict = dict(room)
+    room_dict['clients'] = [dict(c) for c in clients]
+    message = json_message(8, {'room_info': room_dict})
+    for client in room.clients:
+        client.socket.send(message.encode('utf-8'))
+
+def broadcast_room_chat(room, msg):
+    global clients
+    message = json_message(6, msg)
     for client in room.clients:
         client.socket.send(message.encode('utf-8'))
 
 
 def handle(client):
+    global custom_signal, clients, rooms
+
     while True:
         try:
             # 클라이언트로부터 타당한 메시지를 받았는지 확인
             message = json.loads(client.socket.recv(1024).decode('utf-8'))
             print(message)
+            custom_signal.updateLog.emit(f"{client.nickname}#{client.port}> {message}")
 
             if message is None: # Todo: 클라이언트 연결 끊어지면 raise Exception 해줘야함.. 이렇게 맞나
                 raise Exception("message 0")
 
-            if message['code'] == 1: # FIXME: 전체 브로드캐스트 (확성기)
-                # 브로드캐스트 함수 동작
-                broadcast(0, (f"{client.nickname}:"+message['data']))
+            if message['code'] == 1: # 전체 채팅
+                broadcast(0, (f"{client.nickname}#{client.port}: "+message['data']))
             elif message['code'] == 4: # change nickname
                 client.nickname = message['data']
                 broadcast_login_list()
@@ -113,11 +127,17 @@ def handle(client):
                 room.join(client) # 방장 방 들어가기
                 broadcast_room_list()
                 broadcast_room_info(room) # ==방장(방만든client)한테 room_info 주기
+
+            elif message['code'] == 6: # room chat !
+                room_num = int(message['data']['room_num'])
+                for room in rooms:
+                    if room.number == room_num:
+                        if room.password == password:  # 비밀번호 맞으면
+                            broadcast_room_chat(room, (f"{client.nickname}#{client.port}: " + message['data']))
+
             elif message['code'] == 7: # 방접속
                 room_num = int(message['data']['room_num'])
                 password = message['data']['password']
-
-
                 if not room_num in [room.number for room in rooms]:
                     # todo 방이 없으면 접근 실패알림 ???? 가능한가? room_info를 특이하게 줘서 실패나 퇴장인거를 알수있게 할까
                     pass
@@ -167,6 +187,7 @@ def handle(client):
 
 # 멀티 클라이언트를 받는 메서드
 def receive():
+    global custom_signal, clients, rooms
     while True:
         client_socket, address = server.accept()
         # 닉네임 요청
